@@ -1,23 +1,26 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:lenz/home.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final cameras = await availableCameras();
+  runApp(MyApp(cameras: cameras));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({required this.cameras, Key? key}) : super(key: key);
+  final List<CameraDescription> cameras;
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Lenz',
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
       debugShowCheckedModeBanner: false,
-      home: const Home(),
+      home: Home(cameras: cameras),
     );
   }
 }
