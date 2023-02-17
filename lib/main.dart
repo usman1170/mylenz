@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:lenz/img.dart';
@@ -20,9 +22,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      routes: {
-        imgroute: (context) => const ImageView(),
-      },
+      // routes: {
+      //   imgroute: (context) => ImageView(),
+      // },
       debugShowCheckedModeBanner: false,
       home: const CameraScreen(),
     );
@@ -97,7 +99,26 @@ class _CameraScreenState extends State<CameraScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                if (!cameraController.value.isInitialized) {
+                  return;
+                }
+                if (cameraController.value.isTakingPicture) {
+                  return;
+                }
+                try {
+                  await cameraController.setFlashMode(FlashMode.auto);
+                  XFile file = await cameraController.takePicture();
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ImageView(file)),
+                  );
+                } on CameraException catch (e) {
+                  debugPrint("Error while taking picture : $e");
+                  return;
+                }
+              },
               child: Container(
                   width: 70,
                   height: 70,
