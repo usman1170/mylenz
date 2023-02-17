@@ -1,0 +1,1 @@
+const imgroute = 'image view';
