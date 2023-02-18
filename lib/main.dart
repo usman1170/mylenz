@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:lenz/img.dart';
@@ -22,9 +20,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      // routes: {
-      //   imgroute: (context) => ImageView(),
-      // },
       debugShowCheckedModeBanner: false,
       home: const CameraScreen(),
     );
