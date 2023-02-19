@@ -1,7 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lenz/img.dart';
-import 'package:lenz/routes/routes.dart';
 
 late List<CameraDescription> cameras;
 Future<void> main() async {
@@ -34,6 +35,21 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
+  void getText(XFile image) async {
+    final inputImage = InputImage.fromFilePath(image.path);
+    final textDetector = GoogleMlKit.vision.textRecognizer();
+    RecognizedText recognizedText = await textDetector.processImage(inputImage);
+    await textDetector.close();
+    scannedText = '';
+    for (TextBlock block in recognizedText.blocks) {
+      for (TextLine line in block.lines) {
+        scannedText = scannedText + line.text + "\n";
+      }
+    }
+    textscanning = false;
+    setState(() {});
+  }
+
   late CameraController cameraController;
   @override
   void initState() {
@@ -155,8 +171,18 @@ class _CameraScreenState extends State<CameraScreen> {
           Align(
             alignment: Alignment.bottomRight,
             child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pushNamed(imgroute);
+              onTap: () async {
+                final galleryimg = await ImagePicker().pickImage(
+                  source: ImageSource.gallery,
+                );
+
+                // ignore: use_build_context_synchronously
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageView(galleryimg!),
+                  ),
+                );
               },
               child: Container(
                   width: 50,

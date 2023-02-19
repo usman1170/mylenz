@@ -7,7 +7,6 @@ import 'package:lenz/text.dart';
 bool textscanning = false;
 XFile? imagefile;
 String scannedText = '';
-XFile? img;
 
 // ignore: must_be_immutable
 class ImageView extends StatefulWidget {
@@ -18,23 +17,6 @@ class ImageView extends StatefulWidget {
 }
 
 class _ImageViewState extends State<ImageView> {
-  void proccessimage() async {
-    try {
-      final pickedImage = img;
-      if (pickedImage != null) {
-        textscanning = true;
-        setState(() {
-          getText(pickedImage);
-        });
-      }
-    } catch (e) {
-      textscanning = false;
-      imagefile = null;
-      scannedText = 'Error occured while scanning';
-      setState(() {});
-    }
-  }
-
   void getText(XFile image) async {
     final inputImage = InputImage.fromFilePath(image.path);
     final textDetector = GoogleMlKit.vision.textRecognizer();
@@ -53,7 +35,6 @@ class _ImageViewState extends State<ImageView> {
   @override
   Widget build(BuildContext context) {
     File picture = File(widget.file.path);
-    img = XFile(widget.file.path);
     return Scaffold(
       body: ListView(children: [
         Container(
@@ -78,7 +59,8 @@ class _ImageViewState extends State<ImageView> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            proccessimage();
+                            final img = XFile(widget.file.path);
+                            getText(img);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
