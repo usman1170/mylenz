@@ -16,17 +16,26 @@ class _TextViewState extends State<TextView> {
         title: const Text('Recognized Text'),
       ),
       body: ListView(children: [
-        if (scannedText == null)
-          const Center(
-            child: CircularProgressIndicator(),
-          ),
-        if (scannedText != null)
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.all(10),
-            child: Text(scannedText),
-          ),
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          padding: const EdgeInsets.all(10),
+          child: FutureBuilder<String>(
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                const Center(
+                  child: CircularProgressIndicator(),
+                );
+                break;
+              case ConnectionState.done:
+                Text(scannedText);
+                break;
+              default:
+            }
+            return Text(scannedText);
+          }),
+        ),
       ]),
     );
   }

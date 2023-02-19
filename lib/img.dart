@@ -23,8 +23,9 @@ class _ImageViewState extends State<ImageView> {
       final pickedImage = img;
       if (pickedImage != null) {
         textscanning = true;
-        setState(() {});
-        getText(pickedImage);
+        setState(() {
+          getText(pickedImage);
+        });
       }
     } catch (e) {
       textscanning = false;
