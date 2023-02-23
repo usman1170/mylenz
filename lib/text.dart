@@ -21,7 +21,7 @@ class _TextViewState extends State<TextView> {
             child: IconButton(
               onPressed: () async {
                 final sharedText = scannedText;
-                await Share.share(scannedText);
+                await Share.share(sharedText);
               },
               icon: const Icon(Icons.share),
             ),
