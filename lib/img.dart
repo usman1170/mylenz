@@ -17,7 +17,22 @@ class ImageView extends StatefulWidget {
 }
 
 class _ImageViewState extends State<ImageView> {
-  void getText(XFile image) async {
+  void getUrduText(XFile image) async {
+    final inputImage = InputImage.fromFilePath(image.path);
+    final textDetector = GoogleMlKit.vision.textRecognizer();
+    RecognizedText recognizedText = await textDetector.processImage(inputImage);
+    await textDetector.close();
+    scannedText = '';
+    for (TextBlock block in recognizedText.blocks) {
+      for (TextLine line in block.lines) {
+        scannedText = scannedText + line.text + "\n";
+      }
+    }
+    textscanning = false;
+    setState(() {});
+  }
+
+  void getEnglishText(XFile image) async {
     final inputImage = InputImage.fromFilePath(image.path);
     final textDetector = GoogleMlKit.vision.textRecognizer();
     RecognizedText recognizedText = await textDetector.processImage(inputImage);
@@ -60,7 +75,7 @@ class _ImageViewState extends State<ImageView> {
                         GestureDetector(
                           onTap: () {
                             final img = XFile(widget.file.path);
-                            getText(img);
+                            getEnglishText(img);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -95,7 +110,17 @@ class _ImageViewState extends State<ImageView> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.of(context).pop();
+                            final img = XFile(widget.file.path);
+                            getUrduText(img);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const TextView()),
+                            ).then((value) {
+                              setState(() {
+                                Navigator.of(context).pop();
+                              });
+                            });
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(
