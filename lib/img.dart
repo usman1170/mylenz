@@ -111,7 +111,7 @@ class _ImageViewState extends State<ImageView> {
                         GestureDetector(
                           onTap: () {
                             final img = XFile(widget.file.path);
-                            getUrduText(img);
+                            getEnglishText(img);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
