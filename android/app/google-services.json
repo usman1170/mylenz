@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "189033132937",
+    "project_id": "visual-sense-6edc3",
+    "storage_bucket": "visual-sense-6edc3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189033132937:android:4cdd7ecd33bfb94dd0a758",
+        "android_client_info": {
+          "package_name": "com.example.lenz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "189033132937-p5jo9ofc81qt7gv19t9v1nip45uc8edb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3bHgAyE7ogzhMvOpJikLA1llLFRhO3PU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "189033132937-p5jo9ofc81qt7gv19t9v1nip45uc8edb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
