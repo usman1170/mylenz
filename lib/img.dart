@@ -1,11 +1,12 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lenz/text.dart';
+import 'package:toast/toast.dart';
 
 bool textscanning = false;
-XFile? imagefile;
 String scannedText = '';
 
 // ignore: must_be_immutable
@@ -17,6 +18,27 @@ class ImageView extends StatefulWidget {
 }
 
 class _ImageViewState extends State<ImageView> {
+  // Firebase function
+  void uploadimage(XFile image) async {
+    try {
+      firebase_storage.UploadTask uploadTask;
+      firebase_storage.Reference reference = firebase_storage
+          .FirebaseStorage.instance
+          .ref()
+          .child('images')
+          .child('/${image.name}');
+      uploadTask = reference.putFile(File(image.path));
+      await uploadTask.whenComplete(() => null);
+      final imageUrl = await reference.getDownloadURL();
+      // ignore: avoid_print
+      print('Uploaded image url is : $imageUrl');
+    } catch (e) {
+      // ignore: avoid_print
+      print(e);
+    }
+  }
+
+  // Google ML kit functions
   void getUrduText(XFile image) async {
     final inputImage = InputImage.fromFilePath(image.path);
     final textDetector = GoogleMlKit.vision.textRecognizer();
@@ -25,7 +47,7 @@ class _ImageViewState extends State<ImageView> {
     scannedText = '';
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
-        scannedText = scannedText + line.text + "\n";
+        scannedText = "$scannedText${line.text}\n";
       }
     }
     textscanning = false;
@@ -40,16 +62,21 @@ class _ImageViewState extends State<ImageView> {
     scannedText = '';
     for (TextBlock block in recognizedText.blocks) {
       for (TextLine line in block.lines) {
-        scannedText = scannedText + line.text + "\n";
+        scannedText = "$scannedText${line.text}\n";
       }
     }
     textscanning = false;
     setState(() {});
   }
 
+  void showToast(String msg, {int? duration, int? gravity}) {
+    Toast.show(msg, duration: duration, gravity: gravity);
+  }
+
   @override
   Widget build(BuildContext context) {
     File picture = File(widget.file.path);
+
     return Scaffold(
       body: ListView(children: [
         Container(
@@ -141,6 +168,36 @@ class _ImageViewState extends State<ImageView> {
                             ),
                           ),
                         ),
+                        GestureDetector(
+                          onTap: () {
+                            final img = XFile(widget.file.path);
+                            uploadimage(img);
+                            setState(() {
+                              Navigator.of(context).pop();
+                            });
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.only(
+                              top: 12,
+                              left: 8,
+                              right: 8,
+                              bottom: 10,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                left: 10,
+                                bottom: 2,
+                              ),
+                              child: Text(
+                                "Save image",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -159,13 +216,19 @@ class _ImageViewState extends State<ImageView> {
                   ]),
             ),
             height: 70,
-            child: const Center(
-              child: Text(
-                'Proccess image',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+            child: const Padding(
+              padding: EdgeInsets.only(
+                left: 12,
+                right: 12,
+              ),
+              child: Center(
+                child: Text(
+                  'Proccess image',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

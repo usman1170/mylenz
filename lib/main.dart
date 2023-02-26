@@ -185,14 +185,42 @@ class _CameraScreenState extends State<CameraScreen> {
                 final galleryimg = await ImagePicker().pickImage(
                   source: ImageSource.gallery,
                 );
-
-                // ignore: use_build_context_synchronously
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ImageView(galleryimg!),
-                  ),
-                );
+                if (galleryimg != null) {
+                  // ignore: use_build_context_synchronously
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ImageView(galleryimg),
+                    ),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => SimpleDialog(
+                      title: const Text('Error Occured'),
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(
+                            left: 25,
+                            bottom: 12,
+                          ),
+                          child: Text(
+                            'Image not selected...',
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Ok'),
+                        )
+                      ],
+                    ),
+                  );
+                }
               },
               child: Container(
                   width: 50,
