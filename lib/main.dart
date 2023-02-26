@@ -3,7 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lenz/firebase/gallery.dart';
 import 'package:lenz/img.dart';
+import 'package:lenz/routes/routes.dart';
 
 late List<CameraDescription> cameras;
 Future<void> main() async {
@@ -25,6 +27,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.teal,
       ),
       debugShowCheckedModeBanner: false,
+      routes: {
+        galleryroute: (context) => const GalleryView(),
+      },
       home: const CameraScreen(),
     );
   }
@@ -71,9 +76,11 @@ class _CameraScreenState extends State<CameraScreen> {
       if (e is CameraException) {
         switch (e.code) {
           case 'CameraAccessDenied':
+            // ignore: avoid_print
             print("Assecss was denied");
             break;
           default:
+            // ignore: avoid_print
             print(e.description);
             break;
         }
