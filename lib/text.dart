@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:lenz/img.dart';
 import 'package:share_plus/share_plus.dart';
 
+// ignore: must_be_immutable
 class TextView extends StatefulWidget {
-  const TextView({super.key});
+  TextView(this.text, {super.key});
+  String text;
 
   @override
   State<TextView> createState() => _TextViewState();
@@ -12,6 +14,7 @@ class TextView extends StatefulWidget {
 class _TextViewState extends State<TextView> {
   @override
   Widget build(BuildContext context) {
+    String finalText = widget.text;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Recognized Text'),
@@ -30,25 +33,10 @@ class _TextViewState extends State<TextView> {
       ),
       body: ListView(children: [
         Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.all(10),
-          child: FutureBuilder<String>(
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                const Center(
-                  child: CircularProgressIndicator(),
-                );
-                break;
-              case ConnectionState.done:
-                Text(scannedText);
-                break;
-              default:
-            }
-            return Text(scannedText);
-          }),
-        ),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            padding: const EdgeInsets.all(10),
+            child: Text(scannedText))
       ]),
     );
   }

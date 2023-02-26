@@ -3,7 +3,9 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lenz/main.dart';
 import 'package:lenz/text.dart';
+import 'package:lenz/toasts/toast.dart';
 import 'package:toast/toast.dart';
 
 bool textscanning = false;
@@ -69,15 +71,12 @@ class _ImageViewState extends State<ImageView> {
     setState(() {});
   }
 
-  void showToast(String msg, {int? duration, int? gravity}) {
-    Toast.show(msg, duration: duration, gravity: gravity);
-  }
-
   @override
   Widget build(BuildContext context) {
     File picture = File(widget.file.path);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: ListView(children: [
         Container(
           margin: const EdgeInsets.only(top: 0),
@@ -106,7 +105,7 @@ class _ImageViewState extends State<ImageView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const TextView()),
+                                  builder: (context) => TextView(scannedText)),
                             ).then((value) {
                               setState(() {
                                 Navigator.of(context).pop();
@@ -142,7 +141,7 @@ class _ImageViewState extends State<ImageView> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const TextView()),
+                                  builder: (context) => TextView(scannedText)),
                             ).then((value) {
                               setState(() {
                                 Navigator.of(context).pop();
@@ -175,6 +174,8 @@ class _ImageViewState extends State<ImageView> {
                             setState(() {
                               Navigator.of(context).pop();
                             });
+
+                            image_saved_toast;
                           },
                           child: const Padding(
                             padding: EdgeInsets.only(
