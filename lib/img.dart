@@ -174,7 +174,6 @@ class _ImageViewState extends State<ImageView> {
                             setState(() {
                               Navigator.of(context).pop();
                             });
-
                             image_saved_toast;
                           },
                           child: const Padding(

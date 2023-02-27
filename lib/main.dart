@@ -88,6 +88,48 @@ class _CameraScreenState extends State<CameraScreen> {
     });
   }
 
+  void getimage() async {
+    final galleryimg = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    if (galleryimg != null) {
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImageView(galleryimg),
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => SimpleDialog(
+          title: const Text('Error Occured'),
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 25,
+                bottom: 12,
+              ),
+              child: Text(
+                'Image not selected...',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Ok'),
+            )
+          ],
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,26 +203,6 @@ class _CameraScreenState extends State<CameraScreen> {
           Align(
             alignment: Alignment.bottomLeft,
             child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                  width: 50,
-                  height: 50,
-                  margin: const EdgeInsets.only(bottom: 30, left: 25),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.black.withOpacity(0.4)),
-                  child: const Center(
-                    child: Icon(
-                      Icons.flip_camera_ios,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  )),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: GestureDetector(
               onTap: () async {
                 final galleryimg = await ImagePicker().pickImage(
                   source: ImageSource.gallery,
@@ -221,6 +243,28 @@ class _CameraScreenState extends State<CameraScreen> {
                     ),
                   );
                 }
+              },
+              child: Container(
+                  width: 50,
+                  height: 50,
+                  margin: const EdgeInsets.only(bottom: 30, left: 25),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.black.withOpacity(0.4)),
+                  child: const Center(
+                    child: Icon(
+                      Icons.upload,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  )),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pushNamed(galleryroute);
               },
               child: Container(
                   width: 50,
