@@ -3,10 +3,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lenz/main.dart';
 import 'package:lenz/text.dart';
 import 'package:lenz/toasts/toast.dart';
-import 'package:toast/toast.dart';
 
 bool textscanning = false;
 String scannedText = '';
