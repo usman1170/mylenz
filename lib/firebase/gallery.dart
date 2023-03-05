@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lenz/firebase/imageview.dart';
 import 'package:lenz/services/storage.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -20,44 +21,52 @@ class _GalleryViewState extends State<GalleryView> {
       appBar: AppBar(
         title: const Text('Your images'),
       ),
-      body:
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: FutureBuilder(
-          //     future: storage.listImages(),
-          //     builder: (BuildContext context,
-          //         AsyncSnapshot<firebase_storage.ListResult> snapshot) {
-          //       if (snapshot.connectionState == ConnectionState.done &&
-          //           snapshot.hasData) {
-          //         return SizedBox(
-          //           height: 400,
-          //           child: ListView.builder(
-          //             scrollDirection: Axis.vertical,
-          //             shrinkWrap: true,
-          //             itemCount: snapshot.data!.items.length,
-          //             itemBuilder: (BuildContext context, int index) {
-          //               return Padding(
-          //                 padding: const EdgeInsets.all(8.0),
-          //                 child: ElevatedButton(
-          //                   onPressed: () {},
-          //                   child: Text(snapshot.data!.items[index].name),
-          //                 ),
-          //               );
-          //             },
-          //           ),
-          //         );
-          //       }
-          //       if (snapshot.connectionState == ConnectionState.waiting ||
-          //           !snapshot.hasData) {
-          //         return const Center(
-          //           child: CircularProgressIndicator(),
-          //         );
-          //       }
-          //       return Container();
-          //     },
-          //   ),
-          // ),
-          StreamBuilder(
+      body: ListView(children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: FutureBuilder(
+            future: storage.listImages(),
+            builder: (BuildContext context,
+                AsyncSnapshot<firebase_storage.ListResult> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData) {
+                return SizedBox(
+                  height: 400,
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.items.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ImagePreview(),
+                                ));
+                          },
+                          child: Text(snapshot.data!.items[index].name),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.waiting ||
+                  !snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              return Container();
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: StreamBuilder(
               stream:
                   FirebaseFirestore.instance.collection('images').snapshots(),
               builder: (context, snapshot) {
@@ -80,6 +89,8 @@ class _GalleryViewState extends State<GalleryView> {
                           );
                         });
               }),
+        ),
+      ]),
     );
   }
 }

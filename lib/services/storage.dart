@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class Storage {
   final firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   Future<firebase_storage.ListResult> listImages() async {
     firebase_storage.ListResult result = await storage.ref('images').listAll();
     for (var reference in result.items) {

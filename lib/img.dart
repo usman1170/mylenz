@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
@@ -18,6 +19,7 @@ class ImageView extends StatefulWidget {
 }
 
 class _ImageViewState extends State<ImageView> {
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   // Firebase function
   void uploadimage(XFile image) async {
     try {
@@ -30,6 +32,15 @@ class _ImageViewState extends State<ImageView> {
       uploadTask = reference.putFile(File(image.path));
       await uploadTask.whenComplete(() => null);
       final imageUrl = await reference.getDownloadURL();
+      firestore
+          .collection('images')
+          .doc('r3EDWp2hNMjqkvcnv7Lk')
+          .set({
+            'url': imageUrl,
+          })
+          .then((value) => print('Images path added to firestore'))
+          .catchError(
+              (error) => print('failed to upload path due to : $error'));
       // ignore: avoid_print
       print('Uploaded image url is : $imageUrl');
     } catch (e) {
