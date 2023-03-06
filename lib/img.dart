@@ -11,7 +11,6 @@ import 'package:http/http.dart' as http;
 
 bool textscanning = false;
 String scannedText = '';
-String? _base64;
 
 // ignore: must_be_immutable
 class ImageView extends StatefulWidget {
@@ -23,12 +22,18 @@ class ImageView extends StatefulWidget {
 
 class _ImageViewState extends State<ImageView> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // Base64 Image function
+  String base64Image(File image) {
+    List<int> imageBytes = image.readAsBytesSync();
+    String base64Image = base64Encode(imageBytes);
+    return base64Image;
+  }
 
   // APi Funcrion
   Future<void> sendImage(File image) async {
-    // String base64 = base6(image);
-    const url = 'https://us-central1-risetech.cloudfunctions.net/vision-api';
-    final api = Uri.parse(url);
+    String base64 = base64Image(image);
+    final api =
+        Uri.parse('https://us-central1-risetech.cloudfunctions.net/vision-api');
     final responce = await http.post(api,
         headers: {'conrent-type': 'application/json'},
         body: jsonEncode(
@@ -170,8 +175,8 @@ class _ImageViewState extends State<ImageView> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            final img = XFile(widget.file.path);
-                            getEnglishText(img);
+                            final img = File(widget.file.path);
+                            sendImage(img);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
