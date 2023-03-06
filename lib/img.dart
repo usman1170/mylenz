@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -6,9 +7,11 @@ import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lenz/text.dart';
 import 'package:lenz/toasts/toast.dart';
+import 'package:http/http.dart' as http;
 
 bool textscanning = false;
 String scannedText = '';
+String? _base64;
 
 // ignore: must_be_immutable
 class ImageView extends StatefulWidget {
@@ -20,6 +23,23 @@ class ImageView extends StatefulWidget {
 
 class _ImageViewState extends State<ImageView> {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // APi Funcrion
+  Future<void> sendImage(File image) async {
+    // String base64 = base6(image);
+    const url = 'https://us-central1-risetech.cloudfunctions.net/vision-api';
+    final api = Uri.parse(url);
+    final responce = await http.post(api,
+        headers: {'conrent-type': 'application/json'},
+        body: jsonEncode(
+          {'image': base64},
+        ));
+    // ignore: avoid_print
+    print('Responce status = ${responce.statusCode}');
+    // ignore: avoid_print
+    print('Responce body = ${responce.body}');
+  }
+
   // Firebase function
   void uploadimage(XFile image) async {
     try {
@@ -78,6 +98,11 @@ class _ImageViewState extends State<ImageView> {
     }
     textscanning = false;
     setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
