@@ -39,6 +39,9 @@ class _ImageViewState extends State<ImageView> {
         body: jsonEncode(
           {'image': base64},
         ));
+    setState(() {
+      scannedText = responce.body;
+    });
     // ignore: avoid_print
     print('Responce status = ${responce.statusCode}');
     // ignore: avoid_print
