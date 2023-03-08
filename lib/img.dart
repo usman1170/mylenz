@@ -42,10 +42,63 @@ class _ImageViewState extends State<ImageView> {
     setState(() {
       scannedText = responce.body;
     });
-    // ignore: avoid_print
-    print('Responce status = ${responce.statusCode}');
-    // ignore: avoid_print
-    print('Responce body = ${responce.body}');
+    if (responce.statusCode == 200) {
+      print('Responce body = ${responce.body}');
+    } else if (responce.statusCode == 404) {
+      showDialog(
+        context: context,
+        builder: (context) => SimpleDialog(
+          title: const Text('Error Occured'),
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 25,
+                bottom: 12,
+              ),
+              child: Text(
+                '404 not found',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Ok'),
+            )
+          ],
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => SimpleDialog(
+          title: const Text('Error Occured'),
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(
+                left: 25,
+                bottom: 12,
+              ),
+              child: Text(
+                'Server not responding',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Ok'),
+            )
+          ],
+        ),
+      );
+    }
   }
 
   // Firebase function
