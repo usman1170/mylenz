@@ -35,7 +35,7 @@ class _ImageViewState extends State<ImageView> {
     final api =
         Uri.parse('https://us-central1-risetech.cloudfunctions.net/vision-api');
     final responce = await http.post(api,
-        headers: {'conrent-type': 'application/json'},
+        headers: {'content-type': 'application/json'},
         body: jsonEncode(
           {'image': base64},
         ));
