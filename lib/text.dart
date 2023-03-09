@@ -36,7 +36,7 @@ class _TextViewState extends State<TextView> {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             padding: const EdgeInsets.all(10),
-            child: Text(scannedText))
+            child: Text(finalText))
       ]),
     );
   }

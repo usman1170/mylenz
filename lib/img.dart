@@ -42,6 +42,8 @@ class _ImageViewState extends State<ImageView> {
     setState(() {
       scannedText = responce.body;
     });
+    // print('Responce body = ${responce.statusCode}');
+    // print('Responce body = ${responce.body}');
     if (responce.statusCode == 200) {
       print('Responce body = ${responce.body}');
     } else if (responce.statusCode == 404) {
