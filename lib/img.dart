@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -117,8 +119,7 @@ class _ImageViewState extends State<ImageView> {
       final imageUrl = await reference.getDownloadURL();
       firestore
           .collection('images')
-          .doc('r3EDWp2hNMjqkvcnv7Lk')
-          .set({
+          .add({
             'url': imageUrl,
           })
           .then((value) => print('Images path added to firestore'))
